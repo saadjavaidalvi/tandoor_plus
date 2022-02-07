@@ -1,0 +1,211 @@
+{
+  "project_info": {
+    "project_number": "19555262107",
+    "firebase_url": "https://tandoor-9df7e.firebaseio.com",
+    "project_id": "tandoor-9df7e",
+    "storage_bucket": "tandoor-9df7e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19555262107:android:c3270bf228bdc49116303e",
+        "android_client_info": {
+          "package_name": "pk.com.tandoor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "19555262107-co6s6mm8109ssjme7tot0hul0sldcoqe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pk.com.tandoor",
+            "certificate_hash": "44ce24f46ced0ca56098d174e5ef5e0734b5b7be"
+          }
+        },
+        {
+          "client_id": "19555262107-i33m18ato14pv73dn6i26tkqt68b1qv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBACFhIXDX46S-izAVPH7fHJ3McytYIixk"
+        },
+        {
+          "current_key": "AIzaSyDvfrND0WquxWASirPzej7Y3Gp2f_helPM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "19555262107-i33m18ato14pv73dn6i26tkqt68b1qv9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19555262107:android:ca590896ce65454f16303e",
+        "android_client_info": {
+          "package_name": "pk.com.tandoor.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "19555262107-i33m18ato14pv73dn6i26tkqt68b1qv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBACFhIXDX46S-izAVPH7fHJ3McytYIixk"
+        },
+        {
+          "current_key": "AIzaSyDvfrND0WquxWASirPzej7Y3Gp2f_helPM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "19555262107-i33m18ato14pv73dn6i26tkqt68b1qv9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19555262107:android:842c865895f1e7de16303e",
+        "android_client_info": {
+          "package_name": "pk.com.tandoor.rider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "19555262107-lkroqn64r54lcaaav4hgjs65f1bi7gv4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pk.com.tandoor.rider",
+            "certificate_hash": "44ce24f46ced0ca56098d174e5ef5e0734b5b7be"
+          }
+        },
+        {
+          "client_id": "19555262107-i33m18ato14pv73dn6i26tkqt68b1qv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBACFhIXDX46S-izAVPH7fHJ3McytYIixk"
+        },
+        {
+          "current_key": "AIzaSyDvfrND0WquxWASirPzej7Y3Gp2f_helPM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "19555262107-i33m18ato14pv73dn6i26tkqt68b1qv9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19555262107:android:69884f91e49de17016303e",
+        "android_client_info": {
+          "package_name": "pk.com.tandoor.shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "19555262107-cijk3t9lh17scd5lkfpkejvmh4r2d848.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pk.com.tandoor.shop",
+            "certificate_hash": "44ce24f46ced0ca56098d174e5ef5e0734b5b7be"
+          }
+        },
+        {
+          "client_id": "19555262107-i33m18ato14pv73dn6i26tkqt68b1qv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBACFhIXDX46S-izAVPH7fHJ3McytYIixk"
+        },
+        {
+          "current_key": "AIzaSyDvfrND0WquxWASirPzej7Y3Gp2f_helPM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "19555262107-i33m18ato14pv73dn6i26tkqt68b1qv9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19555262107:android:12ab164af422891216303e",
+        "android_client_info": {
+          "package_name": "pk.com.tandoor.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "19555262107-4upomcaj3avisrkgjlbk5guo58jaamk0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pk.com.tandoor.user",
+            "certificate_hash": "492ef942a7781e1b62e350a02b0a8b73c9e17a10"
+          }
+        },
+        {
+          "client_id": "19555262107-c4jt3gnt3qieami979kt839b7emmlli7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pk.com.tandoor.user",
+            "certificate_hash": "44ce24f46ced0ca56098d174e5ef5e0734b5b7be"
+          }
+        },
+        {
+          "client_id": "19555262107-i33m18ato14pv73dn6i26tkqt68b1qv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBACFhIXDX46S-izAVPH7fHJ3McytYIixk"
+        },
+        {
+          "current_key": "AIzaSyDvfrND0WquxWASirPzej7Y3Gp2f_helPM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "19555262107-i33m18ato14pv73dn6i26tkqt68b1qv9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

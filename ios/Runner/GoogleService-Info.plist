@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>19555262107-5lucir4bpjcvsdekjo3tf51eulp1jb54.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.19555262107-5lucir4bpjcvsdekjo3tf51eulp1jb54</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>19555262107-4upomcaj3avisrkgjlbk5guo58jaamk0.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCxPWthBh8Chea6v-jFa2bixg7666hrNKA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>19555262107</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>pk.com.tandoor.user</string>
+	<key>PROJECT_ID</key>
+	<string>tandoor-9df7e</string>
+	<key>STORAGE_BUCKET</key>
+	<string>tandoor-9df7e.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:19555262107:ios:e27386b7e530a5dc16303e</string>
+	<key>DATABASE_URL</key>
+	<string>https://tandoor-9df7e.firebaseio.com</string>
+</dict>
+</plist>

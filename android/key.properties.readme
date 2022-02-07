@@ -1,0 +1,5 @@
+storePassword=T********3
+keyPassword=T********3
+keyAlias=key0
+# Remove the first slash in M1 machine:
+storeFile=/../../../Keystore/keystore.jks

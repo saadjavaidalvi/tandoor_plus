@@ -1,0 +1,13 @@
+{
+    // "settings": {
+    //     "dart.flutterSdkPath": "/Users/saadjavaidalvi/Personal/flutter_versions/flutter_2_10"
+    // }
+
+    "dart.flutterSdkPath": "/Users/saadjavaidalvi/Personal/flutter_versions/flutter_2_10"
+    //   "dart.flutterSdkPath": "/Users/saadjavaidalvi/flutter",
+    //   "dart.flutterSdkPaths": [
+    //     "/Users/saadjavaidalvi/flutter",
+    //     "/Users/saadjavaidalvi/flutter/bin/flutter"
+    // ]
+    // "/home/saad/Downloads/flutter_linux_v1.12.13+hotfix.7-stable/flutter"
+}
