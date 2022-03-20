@@ -35,7 +35,7 @@ GetStorage get storage {
   return _storage;
 }
 
-enum NormalSize { S_12, S_14, S_15, S_16, S_18, S_22 }
+enum NormalSize { S_12, S_14, S_15, S_16, S_18, S_22 ,S_48}
 
 const TextStyle AppTextStyle = TextStyle(color: Color(0xFF1A1A1A));
 
@@ -69,6 +69,8 @@ getARFontSize(BuildContext context, NormalSize normalSize) {
     return MediaQuery.of(context).size.width * 0.046;
   if (normalSize == NormalSize.S_22)
     return MediaQuery.of(context).size.width * 0.056;
+  if (normalSize == NormalSize.S_48)
+    return MediaQuery.of(context).size.width * 0.072;
 }
 
 // Return true if user has accepted terms and conditions before

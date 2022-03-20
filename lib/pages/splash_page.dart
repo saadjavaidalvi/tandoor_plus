@@ -94,6 +94,7 @@ class _SplashPageState extends State<SplashPage> {
 
     User currentUser = _firebaseAuth.currentUser;
     if (currentUser == null) {
+      // openPage(context, HomePage.route);
       openPage(context, WelcomePage.route);
     } else if (currentUser != null) {
       await _messagingManager.saveTokenToDb(

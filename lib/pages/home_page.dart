@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info/package_info.dart';
+import 'package:provider/provider.dart';
 import 'package:user/common/app_progress_bar.dart';
 import 'package:user/common/cart_button.dart';
 import 'package:user/common/dividers.dart';
@@ -36,6 +38,8 @@ import 'package:user/pages/profile_page.dart';
 import 'package:user/pages/send_something_page.dart';
 import 'package:user/pages/shop_page.dart';
 import 'package:user/pages/transations_page.dart';
+import 'package:user/provider/cart_quantity_provider.dart';
+
 
 import 'your_orders_page.dart';
 
@@ -88,6 +92,17 @@ class _HomePage extends State<HomePage> {
     cart = getIt.get<Cart>();
   }
 
+  Shop tMartShop = Shop(
+                              address:"Allama Iqbal Town, Lahore",
+                              available:true,
+                              deliveryPrice:null,
+                              distance:556.0,
+                              distanceTime:18,
+                              id:"8rzazhUgDnfGvll1yazTQTZofE52",
+                              imageUrl:"https://i.imgur.com/euiUQZ6.jpg",
+                              nameEnglish:"TMart",
+                              nameUrdu:null,);
+
   @override
   void initState() {
     super.initState();
@@ -95,6 +110,7 @@ class _HomePage extends State<HomePage> {
     points = 0;
     wallet = 0;
     cartQuantity = 0;
+    context.read<CartProvider>().updateCartQuantity(cartQuantity);
     progressBarVisible = true;
     isOffline = false;
     shopsProgressBarVisible = true;
@@ -215,6 +231,7 @@ class _HomePage extends State<HomePage> {
         );
       });
       cartQuantity = cart.cartQuantity;
+      context.read<CartProvider>().updateCartQuantity(cartQuantity);
       initCards();
     });
   }
@@ -313,6 +330,7 @@ class _HomePage extends State<HomePage> {
   }
 
   void quantityChanged(String itemId, int quantity, Function performChange) {
+    
     if (!cart.isGeneral) {
       if (cart.cartQuantity > 0) {
         showShopChangeConfirmation(
@@ -349,17 +367,22 @@ class _HomePage extends State<HomePage> {
         );
 
         cartQuantity = cart.cartQuantity;
+        // context.read<CartProvider>().updateCartQuantity(cartQuantity);
+        context.read<CartProvider>().updateCartQuantity(cartQuantity);
+        
+      
       });
-
       performChange();
     }
   }
+
 
   void resetOrder() {
     setState(() {
       selectedTab = _TABS.ROTI;
       points = 0;
       cartQuantity = 0;
+      context.read<CartProvider>().updateCartQuantity(cartQuantity);
       progressBarVisible = true;
       cart.clear();
     });
@@ -403,6 +426,7 @@ class _HomePage extends State<HomePage> {
           cart.subCarts.add(SubCart());
         }
         cartQuantity = cart.cartQuantity;
+        context.read<CartProvider>().updateCartQuantity(cartQuantity);
       });
 
       loadConfig();
@@ -458,6 +482,7 @@ class _HomePage extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    
     _HeaderIconText rotiHeader = _HeaderIconText(
       UniqueKey(),
       "assets/icons/ic_header_roti.png",
@@ -533,6 +558,7 @@ class _HomePage extends State<HomePage> {
         return false;
       },
       child: Scaffold(
+         backgroundColor: Color(0xffF9FAF5),
         appBar: AppBar(
           backgroundColor: backgroundColor,
           elevation: 0.0,
@@ -730,64 +756,74 @@ class _HomePage extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          IntrinsicHeight(
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 24),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  rotiHeader,
-                                  shopsHeader,
-                                  deliveryHeader,
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: PageView(
-                              controller: pageController,
-                              clipBehavior: Clip.none,
-                              onPageChanged: (int position) {
-                                _TABS tab = _TABS.values[position];
-                                if (selectedTab != tab) onHeaderClicked(tab);
-                              },
-                              children: [
-                                _RotiPage(productItems, isOffline),
-                                _ShopsPage(
+                          Row(children: [
+                            Expanded(child: _verticalContainer('Tandoor',
+                            Image.asset('assets/icons/tandoor.png',fit: BoxFit.contain,),_RotiPage(productItems,isOffline,openOrderSummaryPage),margins:EdgeInsets.only(left: 20,right: 10,top: 10))),
+                            Expanded(child: _verticalContainer('TMart',Image.asset('assets/icons/tmart.png',fit: BoxFit.contain,),
+                            ShopPage(shop: tMartShop)
+                                ,margins:EdgeInsets.only(left: 10,right: 20,top: 10))),
+                          ],),
+                          _horizontalContainer('Package\n& more',Image.asset('assets/icons/package_more.png',fit: BoxFit.contain,),_MartPage(
                                   isOffline,
-                                  locationAvailable,
-                                  shopsProgressBarVisible,
-                                  searchResultsVisible,
-                                  List.generate(
-                                    (searchResultsVisible
-                                                ? nearByShopsSearchResults
-                                                : nearByShops)
-                                            ?.length ??
-                                        0,
-                                    (index) => _ShopItem(
-                                      (searchResultsVisible
-                                          ? nearByShopsSearchResults
-                                          : nearByShops)[index],
-                                      openShop,
-                                    ),
-                                  ),
-                                  loadNearYouShops,
-                                  searchShop,
-                                ),
-                                _MartPage(
-                                  isOffline,
-                                ),
-                              ],
-                            ),
-                          ),
+                                ),),
+                          // IntrinsicHeight(
+                          //   child: Container(
+                          //     width: double.infinity,
+                          //     decoration: BoxDecoration(
+                          //       color: Colors.white,
+                          //       borderRadius: BorderRadius.circular(8),
+                          //     ),
+                          //     margin:
+                          //         const EdgeInsets.symmetric(horizontal: 24),
+                          //     child: Row(
+                          //       mainAxisAlignment:
+                          //           MainAxisAlignment.spaceBetween,
+                          //       mainAxisSize: MainAxisSize.max,
+                          //       children: [
+                          //         rotiHeader,
+                          //         shopsHeader,
+                          //         deliveryHeader,
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+                          // Expanded(
+                          //   child: PageView(
+                          //     controller: pageController,
+                          //     clipBehavior: Clip.none,
+                          //     onPageChanged: (int position) {
+                          //       _TABS tab = _TABS.values[position];
+                          //       if (selectedTab != tab) onHeaderClicked(tab);
+                          //     },
+                          //     children: [
+                          //       _RotiPage(productItems, isOffline),
+                          //       _ShopsPage(
+                          //         isOffline,
+                          //         locationAvailable,
+                          //         shopsProgressBarVisible,
+                          //         searchResultsVisible,
+                          //         List.generate(
+                          //           (searchResultsVisible
+                          //                       ? nearByShopsSearchResults
+                          //                       : nearByShops)
+                          //                   ?.length ??
+                          //               0,
+                          //           (index) => _ShopItem(
+                          //             (searchResultsVisible
+                          //                 ? nearByShopsSearchResults
+                          //                 : nearByShops)[index],
+                          //             openShop,
+                          //           ),
+                          //         ),
+                          //         loadNearYouShops,
+                          //         searchShop,
+                          //       ),
+                          //       _MartPage(
+                          //         isOffline,
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -861,7 +897,8 @@ class _HomePage extends State<HomePage> {
                       height: 64,
                       child: CartButton(
                         onTap: openOrderSummaryPage,
-                        quantity: cartQuantity,
+                        quantity: context.watch<CartProvider>().quantity,
+                        // cartQuantity,
                       ),
                     ),
                   ],
@@ -879,91 +916,336 @@ class _HomePage extends State<HomePage> {
       ),
     );
   }
+
+  Widget _horizontalContainer(String title,Widget icon,Widget className){
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (route)=>className));
+      },
+      child: Container(
+        margin: EdgeInsets.only(left: 20,right: 20,top: 20,bottom: 46,),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(.25),
+              // spreadRadius: 2,
+              blurRadius: 5
+            )
+          ],
+        color: Colors.white,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal:10.0),
+          child: Row(children: [
+            Expanded(
+              child: Text(title,style: TextStyle(
+                fontSize: getARFontSize(context,NormalSize.S_48),
+                fontWeight: FontWeight.w600,
+                height: 1,
+              ),textAlign: TextAlign.center,),
+            ),
+            Container(width: 30,),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical:10.0),
+                height: 150,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xffF9F9F7),
+                ),
+                child: Center(child: Container(height: 100,child: icon)),
+              ),
+            ),
+          ],),
+        ),
+      ),
+    );
+  }
+
+  Widget _verticalContainer(String title,Widget icon,Widget className,{EdgeInsets margins}){
+    return GestureDetector(
+      onTap: ()async{
+        await Navigator.push(context, MaterialPageRoute(builder: (route)=>className));
+        // setState(() {
+          // quantityChanged(itemId, quantity, performChange)
+        // });
+      },
+      child: Container(
+        margin:margins ??  EdgeInsets.only(left: 20,right: 20,top: 00,bottom: 0,),
+
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(.25),
+              // spreadRadius: 2,
+              blurRadius: 5
+            )
+          ],
+        color: Colors.white,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal:10.0,vertical: 10),
+          child: Column(children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical:10.0),
+              height: 150,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xffF9F9F7),
+              ),
+              child: Center(child: Container(
+                height: 100,
+                child: icon,),),
+            ),
+            Text(title,style: TextStyle(
+              fontSize: getARFontSize(context,NormalSize.S_48),
+              fontWeight: FontWeight.w600,
+              height: 1,
+            ),textAlign: TextAlign.center,),
+            Container(height: 20,),
+          ],),
+        ),
+      ),
+    );
+  }
 }
 
-class _RotiPage extends StatelessWidget {
-  final List<Widget> productItems;
+class _RotiPage extends StatefulWidget {
+  final List<ProductCardWidget> productItems;
   final bool isOffline;
+  final Function openOrderSummaryPage;
 
-  _RotiPage(this.productItems, this.isOffline);
+  _RotiPage(this.productItems,this.isOffline,this.openOrderSummaryPage);
+
+  @override
+  State<_RotiPage> createState() => _RotiPageState();
+}
+
+class _RotiPageState extends State<_RotiPage> {
+
+  // Cart cart;
+
+  // int cartQuantity;
+
+  // // PageController pageController;
+
+  // // // For address
+  // // bool draggableListVisible;
+  // // int selectedAddressIndex;
+  // // List<AddressEntity> _addressEntities = [];
+
+  // List<ProductCardWidget> productItems;
+
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+
+  //   productItems = [];
+
+  //   cart = getIt.get<Cart>();
+  //     cart.subCarts.forEach((sc) {
+  //       sc.orderItems.removeWhere(
+  //         (element) => element.quantity <= 0 || element.price <= 0,
+  //       );
+  //     });
+  //     cartQuantity = cart.cartQuantity;
+  // context.read<CartProvider>().updateCartQuantity(cartQuantity);
+  //     initCards();
+  // }
+
+  // void initCards() {
+  //   List<ProductCardWidget> _items = [];
+
+  //   for (String id in TandoorMenu.productIDs) {
+  //     double rate = TandoorMenu.getRateById(id);
+  //     if (rate > 0) {
+  //       _items.add(
+  //         ProductCardWidget(
+  //           id,
+  //           TandoorMenu.getNameById(id),
+  //           TandoorMenu.getUrduNameById(id),
+  //           TandoorMenu.getImageById(id),
+  //           TandoorMenu.getRateById(id),
+  //           cart.subCarts.length == 1
+  //               ? cart.subCarts[0].orderItems
+  //                       .firstWhere((element) => element.id == id,
+  //                           orElse: () => null)
+  //                       ?.quantity ??
+  //                   0
+  //               : 0,
+  //           quantityChanged,
+  //           false,
+  //         ),
+  //       );
+  //     }
+  //   }
+  //   if (_items.length > 0)
+  //     setState(() {
+  //       productItems.clear();
+  //       productItems = _items;
+  //     });
+  // }
+
+
+  // void quantityChanged(String itemId, int quantity, Function performChange) {
+  //   if (!cart.isGeneral) {
+  //     if (cart.cartQuantity > 0) {
+  //       showShopChangeConfirmation(
+  //         context,
+  //         "You already have items in your cart from another shop. Do you want to remove all other items and add this?",
+  //         onYes: () {
+  //           replaceCartOfOtherShop(itemId, quantity, performChange);
+  //         },
+  //       );
+  //     } else {
+  //       replaceCartOfOtherShop(itemId, quantity, performChange);
+  //     }
+  //   } else {
+  //     int i = cart.subCarts[0].orderItems
+  //         .indexWhere((element) => element.id == itemId);
+
+  //     setState(() {
+  //       if (i < 0) {
+  //         cart.subCarts[0].orderItems.add(
+  //           OrderItem(
+  //             id: itemId,
+  //             quantity: quantity,
+  //             price: TandoorMenu.getRateById(itemId),
+  //             name: TandoorMenu.getNameById(itemId),
+  //             urduName: TandoorMenu.getUrduNameById(itemId),
+  //           ),
+  //         );
+  //       } else {
+  //         cart.subCarts[0].orderItems[i].quantity = quantity;
+  //       }
+
+  //       cart.subCarts[0].orderItems.removeWhere(
+  //             (element) => element.quantity <= 0 || element.price <= 0,
+  //       );
+
+  //       cartQuantity = cart.cartQuantity;
+  // context.read<CartProvider>().updateCartQuantity(cartQuantity);
+  //     });
+
+  //     performChange();
+  //   }
+  // }
+
+  // void replaceCartOfOtherShop(
+  //   String itemId,
+  //   int quantity,
+  //   Function performChange,
+  // ) {
+  //   cart.clear();
+  //   cart.subCarts.add(SubCart());
+  //   quantityChanged(itemId, quantity, performChange);
+  // }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void quantityChanged(String itemId, int quantity, Function performChange) {}
+
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 16,
-              bottom: 8.0,
-              left: 24,
-              right: 24,
-            ),
-            child: Visibility(
-              visible: !isOffline,
-              child: Text(
-                "Jee janab, kitni rotiyan?",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: getARFontSize(context, NormalSize.S_22),
+    return Scaffold(
+      floatingActionButton: CartButton(
+        onTap: widget.openOrderSummaryPage,
+        quantity: context.watch<CartProvider>().quantity,
+        // getIt.get<Cart>().cartQuantity,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      appBar: AppBar(
+        title: Text('Tandoor',style: TextStyle(
+          fontWeight: FontWeight.w600,
+        ),),
+        backgroundColor: Colors.white,
+      ),
+      body: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 16,
+                bottom: 8.0,
+                left: 24,
+                right: 24,
+              ),
+              child: Visibility(
+                visible: !widget.isOffline,
+                child: Text(
+                  "Jee janab, kitni rotiyan?",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: getARFontSize(context, NormalSize.S_22),
+                  ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: Stack(
-              children: [
-                Visibility(
-                  visible: !isOffline,
-                  child: GridView(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 0.73,
+            Expanded(
+              child: Stack(
+                children: [
+                  Visibility(
+                    visible: !widget.isOffline,
+                    child: GridView(
+                      padding: 
+                      const EdgeInsets.only(left: 24.0,right:24,bottom: 100),
+                      // physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 12,
+                        childAspectRatio: 0.73,
+                      ),
+                      children: widget.productItems,
                     ),
-                    children: productItems,
                   ),
-                ),
-                Visibility(
-                  visible: isOffline,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            "assets/images/closed.png",
-                          ),
-                          Text(
-                            "Sorry we are offline",
-                            style: AppTextStyle.copyWith(
-                              fontSize: 20,
+                  Visibility(
+                    visible: widget.isOffline,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              "assets/images/closed.png",
                             ),
-                          ),
-                          Text(
-                            "TandoorPlus active hours are: ${TandoorMenu.tandoorAppConfig["active_hours"].toString().replaceAll("-", " - ")}",
-                            style: AppTextStyle,
-                          ),
-                        ],
+                            Text(
+                              "Sorry we are offline",
+                              style: AppTextStyle.copyWith(
+                                fontSize: 20,
+                              ),
+                            ),
+                            Text(
+                              "TandoorPlus active hours are: ${TandoorMenu.tandoorAppConfig["active_hours"].toString().replaceAll("-", " - ")}",
+                              style: AppTextStyle,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Divider(
-            thickness: 0,
-            height: 65.0,
-            color: Colors.transparent,
-          ),
-        ],
+            // Divider(
+            //   thickness: 0,
+            //   height: 65.0,
+            //   color: Colors.transparent,
+            // ),
+          ],
+        ),
       ),
     );
   }
@@ -990,150 +1272,127 @@ class _ShopsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 16,
-              bottom: 8.0,
-              left: 24,
-              right: 24,
-            ),
-            child: Visibility(
-              visible: !isOffline,
-              child: Text(
-                "Shops near you",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: getARFontSize(
-                    context,
-                    NormalSize.S_22,
-                  ),
-                ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('TMart',style: TextStyle(
+          fontWeight: FontWeight.w600,
+        ),),
+        backgroundColor: Colors.white,
+      ),
+      body: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 16,
+                bottom: 8.0,
+                left: 24,
+                right: 24,
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 24, right: 24, bottom: 8),
-            child: Theme(
-              data: ThemeData(
-                fontFamily: GoogleFonts.nunitoSans().fontFamily,
-                primaryColor: Colors.black,
-                primarySwatch: MaterialColor(
-                  Colors.black45.value,
-                  <int, Color>{
-                    50: Colors.black45,
-                    100: Colors.black45,
-                    200: Colors.black45,
-                    300: Colors.black45,
-                    400: Colors.black45,
-                    500: Colors.black45,
-                    600: Colors.black45,
-                    700: Colors.black45,
-                    800: Colors.black45,
-                    900: Colors.black45,
-                  },
-                ),
-              ),
-              child: TextField(
-                controller: _searchController,
-                autofocus: false,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    gapPadding: 0,
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  hintText: "Search Shop",
-                  contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                ),
-                keyboardType: TextInputType.text,
-                maxLines: 1,
-                onSubmitted: (_) => onSearchSubmit(),
-                textInputAction: TextInputAction.search,
-                onChanged: (value) {
-                  if (value.length == 0) {
-                    onSearchSubmit();
-                  }
-                },
-              ),
-            ),
-          ),
-          Expanded(
-            child: Stack(
-              children: [
-                Visibility(
-                  visible: locationAvailable &&
-                      !isOffline &&
-                      (progressBarVisible || children.length > 0),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: ListView(
-                      key: UniqueKey(),
-                      children: [
-                        ...this.children,
-                        Visibility(
-                          visible: progressBarVisible,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SpinningLogo(
-                                name: "assets/launcher/foreground.png",
-                                height: 100,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          indent: 124,
-                          endIndent: 124,
-                          thickness: 2,
-                        ),
-                        Divider(
-                          color: Colors.transparent,
-                          height: 35,
-                        ),
-                      ],
+              child: Visibility(
+                visible: !isOffline,
+                child: Text(
+                  "Ab sb saman ungli k isharay par!",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: getARFontSize(
+                      context,
+                      NormalSize.S_22,
                     ),
                   ),
                 ),
-                Visibility(
-                  visible: isOffline,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+              ),
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 24, right: 24, bottom: 8),
+            //   child: Theme(
+            //     data: ThemeData(
+            //       fontFamily: GoogleFonts.nunitoSans().fontFamily,
+            //       primaryColor: Colors.black,
+            //       primarySwatch: MaterialColor(
+            //         Colors.black45.value,
+            //         <int, Color>{
+            //           50: Colors.black45,
+            //           100: Colors.black45,
+            //           200: Colors.black45,
+            //           300: Colors.black45,
+            //           400: Colors.black45,
+            //           500: Colors.black45,
+            //           600: Colors.black45,
+            //           700: Colors.black45,
+            //           800: Colors.black45,
+            //           900: Colors.black45,
+            //         },
+            //       ),
+            //     ),
+            //     child: TextField(
+            //       controller: _searchController,
+            //       autofocus: false,
+            //       decoration: InputDecoration(
+            //         border: OutlineInputBorder(
+            //           gapPadding: 0,
+            //           borderSide: BorderSide(color: Colors.black),
+            //         ),
+            //         hintText: "Search Shop",
+            //         contentPadding: EdgeInsets.symmetric(horizontal: 8),
+            //       ),
+            //       keyboardType: TextInputType.text,
+            //       maxLines: 1,
+            //       onSubmitted: (_) => onSearchSubmit(),
+            //       textInputAction: TextInputAction.search,
+            //       onChanged: (value) {
+            //         if (value.length == 0) {
+            //           onSearchSubmit();
+            //         }
+            //       },
+            //     ),
+            //   ),
+            // ),
+            Expanded(
+              child: Stack(
+                children: [
+                  Visibility(
+                    visible: locationAvailable &&
+                        !isOffline &&
+                        (progressBarVisible || children.length > 0),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: ListView(
+                        key: UniqueKey(),
                         children: [
-                          Image.asset(
-                            "assets/images/closed.png",
-                          ),
-                          Text(
-                            "Sorry we are offline",
-                            style: AppTextStyle.copyWith(
-                              fontSize: 20,
+                          ...this.children,
+                          Visibility(
+                            visible: progressBarVisible,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SpinningLogo(
+                                  name: "assets/launcher/foreground.png",
+                                  height: 100,
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            "TandoorPlus active hours are: ${TandoorMenu.tandoorAppConfig["active_hours"].toString().replaceAll("-", " - ")}",
-                            style: AppTextStyle,
+                          Divider(
+                            indent: 124,
+                            endIndent: 124,
+                            thickness: 2,
+                          ),
+                          Divider(
+                            color: Colors.transparent,
+                            height: 35,
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
-                Visibility(
-                  visible: !locationAvailable && !isOffline,
-                  child: GestureDetector(
-                    onTap: () {
-                      getLocationPermission();
-                    },
+                  Visibility(
+                    visible: isOffline,
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -1144,13 +1403,13 @@ class _ShopsPage extends StatelessWidget {
                               "assets/images/closed.png",
                             ),
                             Text(
-                              "Location permission required",
+                              "Sorry we are offline",
                               style: AppTextStyle.copyWith(
                                 fontSize: 20,
                               ),
                             ),
                             Text(
-                              "We need your location to find shops near you.",
+                              "TandoorPlus active hours are: ${TandoorMenu.tandoorAppConfig["active_hours"].toString().replaceAll("-", " - ")}",
                               style: AppTextStyle,
                             ),
                           ],
@@ -1158,40 +1417,72 @@ class _ShopsPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
-                Visibility(
-                  visible: children.length == 0 &&
-                      !progressBarVisible &&
-                      !searchResultsVisible,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            "assets/images/closed.png",
+                  Visibility(
+                    visible: !locationAvailable && !isOffline,
+                    child: GestureDetector(
+                      onTap: () {
+                        getLocationPermission();
+                      },
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Image.asset(
+                                "assets/images/closed.png",
+                              ),
+                              Text(
+                                "Location permission required",
+                                style: AppTextStyle.copyWith(
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Text(
+                                "We need your location to find shops near you.",
+                                style: AppTextStyle,
+                              ),
+                            ],
                           ),
-                          Text(
-                            "No shop is available near you",
-                            style: AppTextStyle.copyWith(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  !locationAvailable && !isOffline ? Container() :
+                  Visibility(
+                    visible: children.length == 0 &&
+                        !progressBarVisible &&
+                        !searchResultsVisible,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              "assets/images/closed.png",
+                            ),
+                            Text(
+                              "No shop is available near you",
+                              style: AppTextStyle.copyWith(
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Divider(
-            thickness: 0,
-            height: 65.0,
-            color: Colors.transparent,
-          ),
-        ],
+            Divider(
+              thickness: 0,
+              height: 65.0,
+              color: Colors.transparent,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1246,280 +1537,288 @@ class _MartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 16,
-              bottom: 8.0,
-              left: 24,
-              right: 24,
-            ),
-            child: Visibility(
-              visible: !isOffline,
-              child: Text(
-                "What would you like to do?",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: getARFontSize(
-                    context,
-                    NormalSize.S_22,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text('Package & more',style: TextStyle(
+          fontWeight: FontWeight.w600,
+        ),),
+      ),
+      body: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 16,
+                bottom: 8.0,
+                left: 24,
+                right: 24,
+              ),
+              child: Visibility(
+                visible: !isOffline,
+                child: Text(
+                  "What would you like to do?",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: getARFontSize(
+                      context,
+                      NormalSize.S_22,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: Stack(
-              children: [
-                Visibility(
-                  visible: !isOffline,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Column(
-                      children: [
-                        TDivider(),
-                        InkWell(
-                          onTap: () => openSendSomethingPage(context),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                              border: Border.all(
-                                color: Color(0xFFEFEFEF),
-                                width: 0.5,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.12),
-                                  offset: Offset(0, 2),
-                                  blurRadius: 8,
-                                ),
-                              ],
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 11,
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: backgroundColor,
-                                  ),
-                                  padding: const EdgeInsets.all(10),
-                                  width: 60,
-                                  height: 60,
-                                  child: Image.asset(
-                                    "assets/icons/ic_parcel.png",
-                                  ),
-                                ),
-                                VTDivider(),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Send something",
-                                        style: AppTextStyle.copyWith(
-                                          color: Color(0xFF333333),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      TDivider(height: 6),
-                                      Text(
-                                        "We'll pick up and drop off your items",
-                                        style: AppTextStyle.copyWith(
-                                          color: Color(0xFFB9B9B9),
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        TDivider(),
-                        InkWell(
-                          onTap: () => openReceiveSomethingPage(context),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                              border: Border.all(
-                                color: Color(0xFFEFEFEF),
-                                width: 0.5,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.12),
-                                  offset: Offset(0, 2),
-                                  blurRadius: 8,
-                                ),
-                              ],
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 11,
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: backgroundColor,
-                                  ),
-                                  padding: const EdgeInsets.all(10),
-                                  width: 60,
-                                  height: 60,
-                                  child: Image.asset(
-                                    "assets/icons/ic_parcel.png",
-                                  ),
-                                ),
-                                VTDivider(),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Receive something",
-                                        style: AppTextStyle.copyWith(
-                                          color: Color(0xFF333333),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      TDivider(height: 6),
-                                      Text(
-                                        "We'll pick up and drop off your items",
-                                        style: AppTextStyle.copyWith(
-                                          color: Color(0xFFB9B9B9),
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        TDivider(),
-                        InkWell(
-                          onTap: () => openBuySomethingPage(context),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                              border: Border.all(
-                                color: Color(0xFFEFEFEF),
-                                width: 0.5,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.12),
-                                  offset: Offset(0, 2),
-                                  blurRadius: 8,
-                                ),
-                              ],
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 11,
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: backgroundColor,
-                                  ),
-                                  padding: const EdgeInsets.all(10),
-                                  width: 60,
-                                  height: 60,
-                                  child: Image.asset(
-                                    "assets/icons/ic_bag.png",
-                                  ),
-                                ),
-                                VTDivider(),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Buy something",
-                                        style: AppTextStyle.copyWith(
-                                          color: Color(0xFF333333),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      TDivider(height: 6),
-                                      Text(
-                                        "We'll purchase and delivery whatever you need",
-                                        style: AppTextStyle.copyWith(
-                                          color: Color(0xFFB9B9B9),
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: isOffline,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
+            Expanded(
+              child: Stack(
+                children: [
+                  Visibility(
+                    visible: !isOffline,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.asset(
-                            "assets/images/closed.png",
-                          ),
-                          Text(
-                            "Sorry we are offline",
-                            style: AppTextStyle.copyWith(
-                              fontSize: 20,
+                          TDivider(),
+                          InkWell(
+                            onTap: () => openSendSomethingPage(context),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                                border: Border.all(
+                                  color: Color(0xFFEFEFEF),
+                                  width: 0.5,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.12),
+                                    offset: Offset(0, 2),
+                                    blurRadius: 8,
+                                  ),
+                                ],
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 11,
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: backgroundColor,
+                                    ),
+                                    padding: const EdgeInsets.all(10),
+                                    width: 60,
+                                    height: 60,
+                                    child: Image.asset(
+                                      "assets/icons/ic_parcel.png",
+                                    ),
+                                  ),
+                                  VTDivider(),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Send something",
+                                          style: AppTextStyle.copyWith(
+                                            color: Color(0xFF333333),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        TDivider(height: 6),
+                                        Text(
+                                          "We'll pick up and drop off your items",
+                                          style: AppTextStyle.copyWith(
+                                            color: Color(0xFFB9B9B9),
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          Text(
-                            "TandoorPlus active hours are: ${TandoorMenu.tandoorAppConfig["active_hours"].toString().replaceAll("-", " - ")}",
-                            style: AppTextStyle,
+                          TDivider(),
+                          InkWell(
+                            onTap: () => openReceiveSomethingPage(context),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                                border: Border.all(
+                                  color: Color(0xFFEFEFEF),
+                                  width: 0.5,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.12),
+                                    offset: Offset(0, 2),
+                                    blurRadius: 8,
+                                  ),
+                                ],
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 11,
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: backgroundColor,
+                                    ),
+                                    padding: const EdgeInsets.all(10),
+                                    width: 60,
+                                    height: 60,
+                                    child: Image.asset(
+                                      "assets/icons/ic_parcel.png",
+                                    ),
+                                  ),
+                                  VTDivider(),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Receive something",
+                                          style: AppTextStyle.copyWith(
+                                            color: Color(0xFF333333),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        TDivider(height: 6),
+                                        Text(
+                                          "We'll pick up and drop off your items",
+                                          style: AppTextStyle.copyWith(
+                                            color: Color(0xFFB9B9B9),
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          TDivider(),
+                          InkWell(
+                            onTap: () => openBuySomethingPage(context),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                                border: Border.all(
+                                  color: Color(0xFFEFEFEF),
+                                  width: 0.5,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.12),
+                                    offset: Offset(0, 2),
+                                    blurRadius: 8,
+                                  ),
+                                ],
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 11,
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: backgroundColor,
+                                    ),
+                                    padding: const EdgeInsets.all(10),
+                                    width: 60,
+                                    height: 60,
+                                    child: Image.asset(
+                                      "assets/icons/ic_bag.png",
+                                    ),
+                                  ),
+                                  VTDivider(),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Buy something",
+                                          style: AppTextStyle.copyWith(
+                                            color: Color(0xFF333333),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        TDivider(height: 6),
+                                        Text(
+                                          "We'll purchase and delivery whatever you need",
+                                          style: AppTextStyle.copyWith(
+                                            color: Color(0xFFB9B9B9),
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Visibility(
+                    visible: isOffline,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              "assets/images/closed.png",
+                            ),
+                            Text(
+                              "Sorry we are offline",
+                              style: AppTextStyle.copyWith(
+                                fontSize: 20,
+                              ),
+                            ),
+                            Text(
+                              "TandoorPlus active hours are: ${TandoorMenu.tandoorAppConfig["active_hours"].toString().replaceAll("-", " - ")}",
+                              style: AppTextStyle,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

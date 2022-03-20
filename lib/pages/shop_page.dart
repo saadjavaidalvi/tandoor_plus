@@ -103,7 +103,7 @@ class _ShopPageState extends State<ShopPage> {
     AppBar appBar = getAppBar(
       context,
       AppBarType.backWithWidget,
-      backgroundColor: Colors.black.withOpacity(0.3),
+      backgroundColor: Colors.white,
       iconsColor: Colors.white,
       leadingWidget: Row(
         children: [
@@ -129,6 +129,10 @@ class _ShopPageState extends State<ShopPage> {
         return false;
       },
       child: Scaffold(
+        appBar: AppBar(
+          title: Text('TMart',style: TextStyle(fontWeight: FontWeight.w600),),
+          backgroundColor: Colors.white,
+        ),
         body: Container(
           color: Color(0xFFF9F9F6),
           child: Stack(
@@ -141,105 +145,105 @@ class _ShopPageState extends State<ShopPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Stack(
-                      children: [
-                        ImageLoader(
-                          imageUrl: shop?.imageUrl,
-                          fit: BoxFit.cover,
-                          height: 300,
-                          width: double.infinity,
-                          available: shop?.available,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 300,
-                          color: Colors.black.withOpacity(0.3),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  shop?.nameEnglish ?? "",
-                                  style: AppTextStyle.copyWith(
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  shop?.nameUrdu ?? "",
-                                  style: AppTextStyle.copyWith(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white.withOpacity(0.8),
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Visibility(
-                                      visible: shop?.distanceTime != null,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: appPrimaryColor,
-                                            width: 0.5,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(7),
-                                        ),
-                                        padding: const EdgeInsets.all(8),
-                                        child: Text(
-                                          "Delivery ${shop?.distanceTimeString}",
-                                          style: AppTextStyle.copyWith(
-                                            color: appPrimaryColor,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    VerticalDivider(color: Colors.transparent),
-                                    Visibility(
-                                      visible: shop.deliveryPrice != null &&
-                                          shop.deliveryPrice > 0,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: appPrimaryColor,
-                                            width: 0.5,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(7),
-                                        ),
-                                        padding: const EdgeInsets.all(8),
-                                        child: Text(
-                                          "Charges Rs. ${shop?.deliveryPrice?.toStringAsFixed(0)}",
-                                          style: AppTextStyle.copyWith(
-                                            color: appPrimaryColor,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Divider(
-                                  color: Colors.transparent,
-                                  height: 8,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Stack(
+                    //   children: [
+                    //     // ImageLoader(
+                    //     //   imageUrl: shop?.imageUrl,
+                    //     //   fit: BoxFit.cover,
+                    //     //   height: 300,
+                    //     //   width: double.infinity,
+                    //     //   available: shop?.available,
+                    //     // ),
+                    //     // Container(
+                    //     //   width: MediaQuery.of(context).size.width,
+                    //     //   height: 300,
+                    //     //   color: Colors.black.withOpacity(0.3),
+                    //     // ),
+                    //     Positioned(
+                    //       bottom: 0,
+                    //       child: Container(
+                    //         width: MediaQuery.of(context).size.width,
+                    //         padding: const EdgeInsets.symmetric(
+                    //           horizontal: 16,
+                    //           vertical: 8,
+                    //         ),
+                    //         child: Column(
+                    //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //           children: [
+                    //             Text(
+                    //               shop?.nameEnglish ?? "",
+                    //               style: AppTextStyle.copyWith(
+                    //                 fontSize: 28,
+                    //                 fontWeight: FontWeight.bold,
+                    //                 color: Colors.white,
+                    //               ),
+                    //             ),
+                    //             Text(
+                    //               shop?.nameUrdu ?? "",
+                    //               style: AppTextStyle.copyWith(
+                    //                 fontSize: 20,
+                    //                 fontWeight: FontWeight.bold,
+                    //                 color: Colors.white.withOpacity(0.8),
+                    //               ),
+                    //             ),
+                    //             Row(
+                    //               children: [
+                    //                 Visibility(
+                    //                   visible: shop?.distanceTime != null,
+                    //                   child: Container(
+                    //                     decoration: BoxDecoration(
+                    //                       border: Border.all(
+                    //                         color: appPrimaryColor,
+                    //                         width: 0.5,
+                    //                       ),
+                    //                       borderRadius:
+                    //                           BorderRadius.circular(7),
+                    //                     ),
+                    //                     padding: const EdgeInsets.all(8),
+                    //                     child: Text(
+                    //                       "Delivery ${shop?.distanceTimeString}",
+                    //                       style: AppTextStyle.copyWith(
+                    //                         color: appPrimaryColor,
+                    //                         fontWeight: FontWeight.bold,
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //                 VerticalDivider(color: Colors.transparent),
+                    //                 Visibility(
+                    //                   visible: shop.deliveryPrice != null &&
+                    //                       shop.deliveryPrice > 0,
+                    //                   child: Container(
+                    //                     decoration: BoxDecoration(
+                    //                       border: Border.all(
+                    //                         color: appPrimaryColor,
+                    //                         width: 0.5,
+                    //                       ),
+                    //                       borderRadius:
+                    //                           BorderRadius.circular(7),
+                    //                     ),
+                    //                     padding: const EdgeInsets.all(8),
+                    //                     child: Text(
+                    //                       "Charges Rs. ${shop?.deliveryPrice?.toStringAsFixed(0)}",
+                    //                       style: AppTextStyle.copyWith(
+                    //                         color: appPrimaryColor,
+                    //                         fontWeight: FontWeight.bold,
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //             Divider(
+                    //               color: Colors.transparent,
+                    //               height: 8,
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     Padding(
                       padding: const EdgeInsets.only(
                         left: 24,
@@ -247,10 +251,10 @@ class _ShopPageState extends State<ShopPage> {
                         top: 18,
                       ),
                       child: Text(
-                        "Kya laingay aap?",
+                        "Ab sb saman ungli k isharay par!",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                    fontSize: getARFontSize(context, NormalSize.S_22),
                         ),
                       ),
                     ),
@@ -279,6 +283,7 @@ class _ShopPageState extends State<ShopPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: List.generate(
                           categoryMenuItems?.keys?.length ?? 0,
+                          // 4,
                           (index) {
                             String category =
                                 categoryMenuItems.keys.elementAt(index);
@@ -295,13 +300,12 @@ class _ShopPageState extends State<ShopPage> {
                                   Radius.circular(8),
                                 ),
                                 boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 4,
-                                    offset: Offset(3, 3),
-                                    spreadRadius: 1,
-                                  ),
-                                ],
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.25),
+                      // offset: Offset(0, -2),
+                      blurRadius: 2,
+                    ),
+                  ],
                               ),
                               child: InkWell(
                                 onTap: () => openMenuViewPage(
@@ -345,12 +349,12 @@ class _ShopPageState extends State<ShopPage> {
                   ],
                 ),
               ),
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: appBar,
-              ),
+              // Positioned(
+              //   top: 0,
+              //   left: 0,
+              //   right: 0,
+              //   child: appBar,
+              // ),
             ],
           ),
         ),

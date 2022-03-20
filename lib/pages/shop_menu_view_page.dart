@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
+import 'package:provider/src/provider.dart';
 import 'package:user/common/app_bar.dart';
 import 'package:user/common/cart_button.dart';
 import 'package:user/common/dividers.dart';
@@ -10,6 +11,7 @@ import 'package:user/models/order_item.dart';
 import 'package:user/models/shop.dart';
 import 'package:user/models/shop_menu_item.dart';
 import 'package:user/pages/order_summary_page.dart';
+import 'package:user/provider/cart_quantity_provider.dart';
 
 class ShopMenuViewPage extends StatefulWidget {
   static final String route = "shop_menu_view";
@@ -48,6 +50,7 @@ class _ShopMenuViewPageState extends State<ShopMenuViewPage> {
       throw UnimplementedError("Method unimplemented");
 
     cartQuantity = cart.cartQuantity;
+    context.read<CartProvider>().updateCartQuantity(cartQuantity);
   }
 
   void replaceCartOfOtherShop(
@@ -115,6 +118,7 @@ class _ShopMenuViewPageState extends State<ShopMenuViewPage> {
       setState(() {
         cart = _cart;
         cartQuantity = cart.cartQuantity;
+        context.read<CartProvider>().updateCartQuantity(cartQuantity);
       });
 
       performChange?.call();
@@ -140,6 +144,7 @@ class _ShopMenuViewPageState extends State<ShopMenuViewPage> {
         setState(() {
           cart = _cart;
           cartQuantity = cart.cartQuantity;
+          context.read<CartProvider>().updateCartQuantity(cartQuantity);
         });
       }
     }
@@ -307,7 +312,8 @@ class _ShopMenuViewPageState extends State<ShopMenuViewPage> {
                 bottom: 16,
                 child: CartButton(
                   onTap: openOrderSummaryPage,
-                  quantity: cartQuantity,
+                  quantity: context.watch<CartProvider>().quantity,
+                  // cartQuantity,
                 ),
               ),
             ],
